@@ -195,6 +195,12 @@ void ssd1306_draw_string(ssd1306_t *ssd, const char *str, uint8_t x, uint8_t y)
   }
 }
 
+// Função para centralizar o texto no display de 128x64 pixels
+int centralizar_texto(const char *str) {
+  int largura_texto = strlen(str) * 8;  // Cada caractere ocupa 8 pixels de largura
+  return (128 - largura_texto) / 2;      // Calcula a posição central
+}
+
 // Função para desenhar no display que alguma grandeza passou do limite superior
 void desenha_display_alerta_sup(ssd1306_t *display, SENSOR_DATA *data) {
     char buffer[22]; // Buffer para formatar as strings
@@ -202,40 +208,47 @@ void desenha_display_alerta_sup(ssd1306_t *display, SENSOR_DATA *data) {
     ssd1306_fill(display, 0); // Limpa a tela
     
     // Título do Alerta
-    ssd1306_draw_string(display, "    ALERTA MAX", 0, 0);
+    ssd1306_draw_string(display, "CUIDADO", centralizar_texto("CUIDADO"), 0);
     ssd1306_hline(display, 0, 127, 10, 1); // Linha separadora
 
     uint8_t linha_atual = 15; // Posição Y inicial para as mensagens
 
     // Verifica cada grandeza e exibe a mensagem de alerta se o limite for ultrapassado
     if (data->temperatura_bmp > data->limite_max_temp) {
-        snprintf(buffer, sizeof(buffer), "T: %.1fC > %dC", data->temperatura_bmp, data->limite_max_temp);
+        snprintf(buffer, sizeof(buffer), "Tmp:%.1fC > %dC", data->temperatura_bmp, data->limite_max_temp);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12; // Move para a próxima linha
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Sup.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->umidade_aht > data->limite_max_umid) {
-        snprintf(buffer, sizeof(buffer), "U: %.1f%% > %d%%", data->umidade_aht, data->limite_max_umid);
+        snprintf(buffer, sizeof(buffer), "Umi:%.1f%% > %d%%", data->umidade_aht, data->limite_max_umid);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12;
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Sup.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->pressao_hpa > data->limite_max_press) {
-        snprintf(buffer, sizeof(buffer), "P: %.0fhPa > %d", data->pressao_hpa, data->limite_max_press);
+        snprintf(buffer, sizeof(buffer), "P:%.0fhPa > %d", data->pressao_hpa, data->limite_max_press);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12;
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Sup.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->altitude > data->limite_max_alt) {
-        snprintf(buffer, sizeof(buffer), "A: %.0fm > %dm", data->altitude, data->limite_max_alt);
+        snprintf(buffer, sizeof(buffer), "Alt: %.0fm > %dm", data->altitude, data->limite_max_alt);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Sup.!", centralizar_texto("Limite Sup.!"), 47);
     }
     
     ssd1306_send_data(display); // Envia o buffer para o display
 }
 
-// Função para centralizar o texto no display de 128x64 pixels
-int centralizar_texto(const char *str) {
-  int largura_texto = strlen(str) * 8;  // Cada caractere ocupa 8 pixels de largura
-  return (128 - largura_texto) / 2;      // Calcula a posição central
-}
 
 // Função para desenhar no display que alguma grandeza passou do limite inferior
 void desenha_display_alerta_inf(ssd1306_t *display, SENSOR_DATA *data) {
@@ -244,30 +257,42 @@ void desenha_display_alerta_inf(ssd1306_t *display, SENSOR_DATA *data) {
     ssd1306_fill(display, 0);
     
     // Título do Alerta
-    ssd1306_draw_string(display, "    ALERTA MIN", 0, 0);
+    ssd1306_draw_string(display, "CUIDADO", centralizar_texto("CUIDADO"), 0);
     ssd1306_hline(display, 0, 127, 10, 1);
 
     uint8_t linha_atual = 15;
 
     // Verifica cada grandeza e exibe a mensagem de alerta se abaixo do limite
     if (data->temperatura_bmp < data->limite_min_temp) {
-        snprintf(buffer, sizeof(buffer), "T: %.1fC < %dC", data->temperatura_bmp, data->limite_min_temp);
+        snprintf(buffer, sizeof(buffer), "Tmp:%.1fC < %dC", data->temperatura_bmp, data->limite_min_temp);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12;
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Inf.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->umidade_aht < data->limite_min_umid) {
-        snprintf(buffer, sizeof(buffer), "U: %.1f%% < %d%%", data->umidade_aht, data->limite_min_umid);
+        snprintf(buffer, sizeof(buffer), "Umi:%.1f%% < %d%%", data->umidade_aht, data->limite_min_umid);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12;
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Inf.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->pressao_hpa < data->limite_min_press) {
-        snprintf(buffer, sizeof(buffer), "P: %.0fhPa < %d", data->pressao_hpa, data->limite_min_press);
+        snprintf(buffer, sizeof(buffer), "P:%.0fhPa < %d", data->pressao_hpa, data->limite_min_press);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
         linha_atual += 12;
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Inf.!", centralizar_texto("Limite Sup.!"), 47);
     }
     if (data->altitude < data->limite_min_alt) {
-        snprintf(buffer, sizeof(buffer), "A: %.0fm < %dm", data->altitude, data->limite_min_alt);
+        snprintf(buffer, sizeof(buffer), "Alt: %.0fm < %dm", data->altitude, data->limite_min_alt);
         ssd1306_draw_string(display, buffer, 0, linha_atual);
+        ssd1306_hline(display, 0, 127, 33, true);
+        ssd1306_draw_string(display, "Temp. Ultrapas.", centralizar_texto("Temp. Ultrapas."), 37);
+        ssd1306_draw_string(display, "Limite Inf.!", centralizar_texto("Limite Sup.!"), 47);
     }
     
     ssd1306_send_data(display);

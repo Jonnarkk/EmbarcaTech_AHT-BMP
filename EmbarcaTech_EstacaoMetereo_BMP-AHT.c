@@ -56,7 +56,8 @@ void vServerTask()
 {
     // Exibe mensagem no display
     ssd1306_fill(&ssd, 0);
-    ssd1306_draw_string(&ssd, "CONECTANDO...", centralizar_texto("CONECTANDO..."), 30);
+    ssd1306_draw_string(&ssd, "ESTABELECENDO", centralizar_texto("ESTABELECENDO"), 30);
+    ssd1306_draw_string(&ssd, "CONEXAO...", centralizar_texto("CONEXAO..."), 40);
     ssd1306_send_data(&ssd);
     vTaskDelay(pdMS_TO_TICKS(2000));     
 
@@ -122,14 +123,14 @@ void vAlertaMatrizTask()
             // Verifica se algum valor ultrapassou o limite MÁXIMO
             if (data->temperatura_bmp > data->limite_max_temp || data->pressao_hpa > data->limite_max_press || data->umidade_aht > data->limite_max_umid || data->altitude > data->limite_max_alt) 
             {
-                desenhar_alerta_lim_superior(pio, sm); // Desenha padrão de alerta na matriz
+                desenhar_alerta(pio, sm); // Desenha padrão de alerta na matriz
                 desenha_display_alerta_sup(&ssd, data);  // Mostra alerta no OLED
                 alerta = true; // Ativa a flag global de alerta
             }
             // Verifica se algum valor ficou abaixo do limite MÍNIMO
             else if (data->temperatura_bmp < data->limite_min_temp || data->pressao_hpa < data->limite_min_press || data->umidade_aht < data->limite_min_umid || data->altitude < data->limite_min_alt) 
             {
-                desenhar_alerta_lim_inferior(pio, sm); // Desenha padrão de alerta na matriz
+                desenhar_alerta(pio, sm); // Desenha padrão de alerta na matriz
                 desenha_display_alerta_inf(&ssd, data);   // Mostra alerta no OLED
                 alerta = true; // Ativa a flag global de alerta
             }

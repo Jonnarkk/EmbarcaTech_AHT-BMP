@@ -3,21 +3,15 @@
 // Número de LEDs na matriz (5x5)
 #define NUM_PIXELS 25
 
-// Luz vermelha (parte superior do semáforo)
-static double desenho_alerta_sup[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
-                                        0.0, 1.0, 1.0, 1.0, 0.0, 
-                                        1.0, 1.0, 1.0, 1.0, 1.0,
-                                        0.0, 0.0, 1.0, 0.0, 0.0,
-                                        0.0, 0.0, 1.0, 0.0, 0.0};
-
-static double desenho_alerta_inf[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
+// Alerta da luz vermelha
+static double desenho_alerta[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
                                         0.0, 0.0, 1.0, 0.0, 0.0, 
-                                        1.0, 1.0, 1.0, 1.0, 1.0,
-                                        0.0, 1.0, 1.0, 1.0, 0.0,
+                                        0.0, 0.0, 1.0, 0.0, 0.0,
+                                        0.0, 0.0, 0.0, 0.0, 0.0,
                                         0.0, 0.0, 1.0, 0.0, 0.0};
 
 
-// Estrutura do semáforo completo (para visualização)
+// Matriz de Led's apagada
 static double apagar[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
                               0.0, 0.0, 0.0, 0.0, 0.0, 
                               0.0, 0.0, 0.0, 0.0, 0.0,
@@ -50,18 +44,11 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
 }
 
 // Função para exibir o semáforo na matriz de LEDs
-void desenhar_alerta_lim_superior(PIO pio, uint sm)
+void desenhar_alerta(PIO pio, uint sm)
 {
     uint32_t valor_led;
 
-    desenho_pio(desenho_alerta_sup, valor_led, pio, sm, 0.0, 0.0, 0.1); // Vermelho (r=1.0)
-}
-
-void desenhar_alerta_lim_inferior(PIO pio, uint sm)
-{
-    uint32_t valor_led;
-
-    desenho_pio(desenho_alerta_inf, valor_led, pio, sm, 0.1, 0.0, 0.0); // Vermelho (r=1.0)
+    desenho_pio(desenho_alerta, valor_led, pio, sm, 0.1, 0.0, 0.0); 
 }
 
 // Função para exibir o semáforo na matriz de LEDs
@@ -69,5 +56,5 @@ void apagar_matriz(PIO pio, uint sm)
 {
     uint32_t valor_led;
 
-    desenho_pio(apagar, valor_led, pio, sm, 0.0, 0.0, 0.0); // Vermelho (r=1.0)
+    desenho_pio(apagar, valor_led, pio, sm, 0.0, 0.0, 0.0); 
 }
