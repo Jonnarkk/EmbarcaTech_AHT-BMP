@@ -273,12 +273,7 @@ void desenha_display_alerta_inf(ssd1306_t *display, SENSOR_DATA *data) {
     ssd1306_send_data(display);
 }
 
-/**
- * @brief Desenha a tela de monitoramento NORMAL, exibindo os dados atuais dos sensores.
- * Os dados são organizados em duas colunas para melhor aproveitamento do espaço.
- * @param display Ponteiro para a estrutura do display.
- * @param data Ponteiro para a estrutura com os dados dos sensores.
- */
+// Função para desenhar a tela do dashboard no display
 void desenha_display_normal(ssd1306_t *display, SENSOR_DATA *data) {
     char buffer[30];
     
@@ -287,25 +282,32 @@ void desenha_display_normal(ssd1306_t *display, SENSOR_DATA *data) {
     // Título
     ssd1306_draw_string(display, "DASHBOARD", centralizar_texto("DASHBOARD"), 0);
     
-    // Coluna da Esquerda
+    // Retângulo
+    ssd1306_rect(display, 10, 3, 122, 50, true, false);
+
+    // Linha vertical
+    ssd1306_line(display, 64, 10, 64, 60, true);
+
+    // Linha horizontal
+    ssd1306_line(display, 3, 35, 122, 35, true);
+
     // Temperatura
-    ssd1306_draw_string(display, "T:", 0, 15);
+    ssd1306_draw_string(display, "Temp:", 7, 15);
     snprintf(buffer, sizeof(buffer), "%.1f C", data->temperatura_bmp);
-    ssd1306_draw_string(display, buffer, 0, 25);
+    ssd1306_draw_string(display, buffer, 7, 25);
     
     // Pressão
-    ssd1306_draw_string(display, "P:", 0, 40);
+    ssd1306_draw_string(display, "Press:", 7, 40);
     snprintf(buffer, sizeof(buffer), "%.0f hPa", data->pressao_hpa);
-    ssd1306_draw_string(display, buffer, 0, 50);
+    ssd1306_draw_string(display, buffer, 7, 50);
 
-    // Coluna da Direita
     // Umidade
-    ssd1306_draw_string(display, "U:", 70, 15);
+    ssd1306_draw_string(display, "Umid:", 75, 15);
     snprintf(buffer, sizeof(buffer), "%.1f %%", data->umidade_aht);
-    ssd1306_draw_string(display, buffer, 70, 25);
+    ssd1306_draw_string(display, buffer, 75, 25);
     
     // Altitude
-    ssd1306_draw_string(display, "A:", 70, 40);
+    ssd1306_draw_string(display, "Alt:", 70, 40);
     snprintf(buffer, sizeof(buffer), "%.0f M", data->altitude);
     ssd1306_draw_string(display, buffer, 70, 50);
     

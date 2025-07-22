@@ -1,5 +1,3 @@
-// Ficheiro: server.c (Versão Final com Todos os Endpoints e Requisitos)
-
 #include "pico/cyw43_arch.h"
 #include "lwip/tcp.h"
 #include <string.h>
@@ -257,5 +255,5 @@ void start_http_server(void) {
     tcp_bind(pcb, IP_ADDR_ANY, 80);
     pcb = tcp_listen(pcb);
     tcp_accept(pcb, http_accept);
-    printf("Servidor final e completo rodando na porta 80.\n");
+    printf("Servidor criado rodando na porta 80.\n");
 }
