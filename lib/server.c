@@ -10,7 +10,7 @@
 // HTML / CSS / JavaScript - FINAL COM TODOS OS CAMPOS E GRÁFICOS
 // =================================================================================
 const char HTML_BODY[] =
-    "<!DOCTYPE html><html><head><title>Estação Meteorológica</title><meta charset='UTF-8'>"
+    "<!DOCTYPE html><html><head><title>DashBoard do Sensor</title><meta charset='UTF-8'>"
     "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
     "<style>"
     "body{font-family:sans-serif;background:#f0f2f5;display:flex;justify-content:center;padding:10px;margin:0}"
@@ -36,7 +36,7 @@ const char HTML_BODY[] =
     "function initCharts(){tempChart=createChart('tempChart','Temperatura (°C)','rgb(255,99,132)');"
     "umidChart=createChart('umidChart','Umidade (%)','rgb(54,162,235)');"
     "pressChart=createChart('pressChart','Pressão (hPa)','rgb(75,192,192)');"
-    "altChart=createChart('altChart','Altitude (m)','rgb(153,102,255)');}"
+    "altChart=createChart('altChart','Altitude (M)','rgb(153,102,255)');}"
     "function setConfig(param){const v=document.getElementById('input_'+param).value;fetch('/config?'+param+'='+v).then(()=>document.getElementById('input_'+param).blur())}"
     "function setLimits(param){const min=document.getElementById('input_limite_min_'+param).value;"
     "const max=document.getElementById('input_limite_max_'+param).value;"
@@ -59,21 +59,21 @@ const char HTML_BODY[] =
     "}).catch(e=>console.error('Erro:',e))}"
     "window.onload=()=>{initCharts();atualizarDados();setInterval(atualizarDados,2000)};"
     "</script></head><body>"
-    "<div class=container><h1>Estação Meteorológica</h1><div class=grid>"
+    "<div class=container><h1>DashBoard do Sensor</h1><div class=grid>"
     "<div class=card><p id=temp>--</p><span>Temperatura (°C)</span></div><div class=card><p id=umid>--</p><span>Umidade (%)</span></div>"
     "<div class=card><p id=press>--</p><span>Pressão (hPa)</span></div><div class=card><p id=alt>--</p><span>Altitude (m)</span></div></div>"
     "<div class=charts-grid><div class=chart-container><canvas id=tempChart></canvas></div><div class=chart-container><canvas id=umidChart></canvas></div>"
     "<div class=chart-container><canvas id=pressChart></canvas></div><div class=chart-container><canvas id=altChart></canvas></div></div><hr>"
-    "<h2>Configurações de Calibração</h2><div class=form-grid>"
+    "<h2>Calibração do Offset</h2><div class=form-grid>"
     "<div class=form-group><label>Offset Temperatura:</label><input type=number step=0.1 id=input_offset_temp><button onclick=\"setConfig('offset_temp')\">Definir</button></div>"
     "<div class=form-group><label>Offset Umidade:</label><input type=number step=0.1 id=input_offset_umid><button onclick=\"setConfig('offset_umid')\">Definir</button></div>"
     "<div class=form-group><label>Offset Pressão:</label><input type=number step=0.1 id=input_offset_press><button onclick=\"setConfig('offset_press')\">Definir</button></div>"
     "<div class=form-group><label>Offset Altitude:</label><input type=number step=0.1 id=input_offset_alt><button onclick=\"setConfig('offset_alt')\">Definir</button></div></div>"
-    "<h2>Configurações de Alertas</h2><div class=form-grid>"
+    "<h2>Definições dos limites</h2><div class=form-grid>"
     "<div class=form-group><label>Limites Temperatura (°C):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_temp> <input type=number placeholder=Max id=input_limite_max_temp></div><button onclick=\"setLimits('temp')\">Definir</button></div>"
     "<div class=form-group><label>Limites Umidade (%):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_umid> <input type=number placeholder=Max id=input_limite_max_umid></div><button onclick=\"setLimits('umid')\">Definir</button></div>"
     "<div class=form-group><label>Limites Pressão (hPa):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_press> <input type=number placeholder=Max id=input_limite_max_press></div><button onclick=\"setLimits('press')\">Definir</button></div>"
-    "<div class=form-group><label>Limites Altitude (m):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_alt> <input type=number placeholder=Max id=input_limite_max_alt></div><button onclick=\"setLimits('alt')\">Definir</button></div>"
+    "<div class=form-group><label>Limites Altitude (M):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_alt> <input type=number placeholder=Max id=input_limite_max_alt></div><button onclick=\"setLimits('alt')\">Definir</button></div>"
     "</div></div></body></html>";
 
 

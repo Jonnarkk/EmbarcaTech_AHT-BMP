@@ -22,28 +22,8 @@ uint pio_init(PIO pio)
     return sm;
 }
 
-// Configura o PWM no pino do buzzer para gerar o tom desejado
-void pwm_init_config() 
-{
-    // Associa o pino do buzzer à função PWM
-    gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
-
-    // Recupera o slice de PWM correspondente ao pino
-    uint slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
-
-    // Carrega a configuração padrão de PWM
-    pwm_config config = pwm_get_default_config();
-    // Ajusta o divisor de clock para que a frequência seja BUZZER_FREQUENCY com 12-bit de resolução
-    pwm_config_set_clkdiv(&config, clock_get_hz(clk_sys) / (BUZZER_FREQUENCY * 4096));
-    // Inicializa o slice de PWM com a configuração e já habilita o módulo
-    pwm_init(slice_num, &config, true);
-
-    // Define nível inicial zero (silêncio)
-    pwm_set_gpio_level(BUZZER_PIN, 0);
-}
-
 // Configura os pinos dos LEDs como saída
-void leds_init()
+void inicializar_leds()
 {
     gpio_init(LED_GREEN);          
     gpio_set_dir(LED_GREEN, GPIO_OUT);
@@ -56,7 +36,7 @@ void leds_init()
 }
 
 // Configura o PWM no pino do buzzer para gerar o tom desejado
-void buzzer_pwm_config() 
+void config_buzzer() 
 {
     // Associa o pino do buzzer à função PWM
     gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);

@@ -15,8 +15,8 @@
 
 uint pio_init(PIO pio);
 
-void buzzer_pwm_config();
+void config_buzzer();
 
-void leds_init();
+void inicializar_leds();
 
 #endif

@@ -149,8 +149,8 @@ void vAlertaMatrizTask()
 // Função de Alerta do LED e do Buzzer
 void vAlertaLEDTask(void *pvParameters) {
     // Inicializa o PWM para o buzzer e os GPIOs para os LEDs
-    buzzer_pwm_config();
-    leds_init();
+    config_buzzer();
+    inicializar_leds();
     
     while (1) {
         // Só executa se a flag de alerta e a de conexão estiverem ativas
@@ -186,7 +186,7 @@ int main()
     setup_button();
 
     // Cria as tarefas do FreeRTOS
-    xTaskCreate(vServerTask, "Server Task", 2048, NULL, 1, NULL); // Aumentado stack para a rede
+    xTaskCreate(vServerTask, "Server Task", 2048, NULL, 1, NULL);
     xTaskCreate(vSensorTask, "Sensor Task", 1024, NULL, 1, NULL);
     xTaskCreate(vAlertaMatrizTask, "Matriz Task", 1024, NULL, 1, NULL);
     xTaskCreate(vAlertaLEDTask, "LED Task", 1024, NULL, 1, NULL);

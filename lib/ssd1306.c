@@ -195,13 +195,7 @@ void ssd1306_draw_string(ssd1306_t *ssd, const char *str, uint8_t x, uint8_t y)
   }
 }
 
-/**
- * @brief Desenha a tela de ALERTA para limites SUPERIORES violados.
- * A função verifica qual grandeza (ou grandezas) ultrapassou o limite máximo
- * e exibe a informação correspondente.
- * @param display Ponteiro para a estrutura do display.
- * @param data Ponteiro para a estrutura com os dados dos sensores.
- */
+// Função para desenhar no display que alguma grandeza passou do limite superior
 void desenha_display_alerta_sup(ssd1306_t *display, SENSOR_DATA *data) {
     char buffer[22]; // Buffer para formatar as strings
 
@@ -243,13 +237,7 @@ int centralizar_texto(const char *str) {
   return (128 - largura_texto) / 2;      // Calcula a posição central
 }
 
-/**
- * @brief Desenha a tela de ALERTA para limites INFERIORES violados.
- * A função verifica qual grandeza (ou grandezas) ficou abaixo do limite mínimo
- * e exibe a informação correspondente.
- * @param display Ponteiro para a estrutura do display.
- * @param data Ponteiro para a estrutura com os dados dos sensores.
- */
+// Função para desenhar no display que alguma grandeza passou do limite inferior
 void desenha_display_alerta_inf(ssd1306_t *display, SENSOR_DATA *data) {
     char buffer[22];
 
@@ -328,10 +316,10 @@ void display_init(ssd1306_t *ssd)
 {
     i2c_init(I2C_PORT, 400 * 1000);
  
-    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);                    // Set the GPIO pin function to I2C
-    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);                    // Set the GPIO pin function to I2C
-    gpio_pull_up(I2C_SDA);                                        // Pull up the data line
-    gpio_pull_up(I2C_SCL);                                        // Pull up the clock line
+    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);                    // Configura o pino para a função I2C
+    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);                    // Configura o pino para a função I2C
+    gpio_pull_up(I2C_SDA);                                        // Habilita pullup para o pino do SDA
+    gpio_pull_up(I2C_SCL);                                        // Habilita pullup para o pino do SCL
 
     ssd1306_init(ssd, WIDTH, HEIGHT, false, endereco, I2C_PORT); // Inicializa o display
     ssd1306_config(ssd);                                         // Configura o display
