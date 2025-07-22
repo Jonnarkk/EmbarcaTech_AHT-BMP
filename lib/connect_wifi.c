@@ -1,9 +1,7 @@
 #include "connect_wifi.h"
 
-#include <stdio.h>         // Biblioteca manipular strings
+#include <stdio.h>       
 #include "pico/stdlib.h"
-
-// #include "lwip/netif.h"
 
 const char WIFI_SSID[] = "Guilherme 2.4";  // adicione o ssid da rede
 const char WIFI_PASSWORD[] = "Cardoso1203";  // adicione a senha
