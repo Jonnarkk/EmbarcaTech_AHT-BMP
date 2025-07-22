@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware/pwm.h"      // Bibloteca de PWM para controle de sinais sonoros
+#include "hardware/pwm.h"      // Biblioteca de PWM para controle de sinais sonoros
 #include "hardware/clocks.h"   // Biblioteca de clocks do RP2040 para gerenciar frequências
+#include "pico/bootrom.h"       // Biblioteca para resetar a placa
 
 // Cabeçalhos criados 
 #include "server.h"
@@ -18,6 +19,7 @@
 
 // Definição do Botão para iniciar programa
 #define BOTAO_A 5
+#define BOTAO_B 6
 
 // --- Variáveis Globais ---
 bool alerta = false;       // Variável que indica se um alerta está ativo
@@ -39,6 +41,21 @@ void gpio_callback(uint gpio, uint32_t events) {
         is_connected = true; // Ativa a flag 'is_connected' para iniciar o monitoramento de alertas
         printf("Botão pressionado! Variável 'is_connected' ligada.\n");
     }
+
+    if(gpio == BOTAO_B){
+         PIO pio = pio0;
+        uint sm = pio_init(pio); 
+
+    // Limpa Display
+    ssd1306_fill(&ssd, false);
+    ssd1306_send_data(&ssd);
+
+    // Limpa matriz de LED's
+    apagar_matriz(pio, sm);
+
+    // Põe em modo bootsel
+    reset_usb_boot(0, 0);
+    }
 }
 
 // Função para configurar o botão A
@@ -47,8 +64,13 @@ void setup_button() {
     gpio_set_dir(BOTAO_A, GPIO_IN);
     gpio_pull_up(BOTAO_A); 
 
+    gpio_init(BOTAO_B);
+    gpio_set_dir(BOTAO_B, GPIO_IN);
+    gpio_pull_up(BOTAO_B); 
+
     
     gpio_set_irq_enabled_with_callback(BOTAO_A, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
+    gpio_set_irq_enabled_with_callback(BOTAO_B, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
 }
 
 // Função para iniciar a conexão do Wi-Fi e servidor na Web
@@ -69,12 +91,10 @@ void vServerTask()
     // Exibe informações sobre o estado de conexão do servidor
     ssd1306_fill(&ssd, 0);
     ssd1306_draw_string(&ssd, "CONECTADO", centralizar_texto("CONECTADO"), 0);
-    ssd1306_draw_string(&ssd, "IP:", 0, 15);
-    if (result) {
-        ssd1306_draw_string(&ssd, result, 25, 15);
-    }
-    ssd1306_draw_string(&ssd, "Iniciar", 0, 35);
-    ssd1306_draw_string(&ssd, "-> Botao A", 0, 45);
+    ssd1306_draw_string(&ssd, "Iniciar", 0, 25);
+    ssd1306_draw_string(&ssd, "-> Botao A", 0, 35);
+    ssd1306_draw_string(&ssd, "Reset", 0, 45);
+    ssd1306_draw_string(&ssd, "-> Botao B", 0, 55);
     ssd1306_send_data(&ssd);
 
     // Loop da tarefa
