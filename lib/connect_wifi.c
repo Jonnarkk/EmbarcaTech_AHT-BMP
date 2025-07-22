@@ -3,8 +3,8 @@
 #include <stdio.h>       
 #include "pico/stdlib.h"
 
-const char WIFI_SSID[] = "Guilherme 2.4";  // adicione o ssid da rede
-const char WIFI_PASSWORD[] = "Cardoso1203";  // adicione a senha
+const char WIFI_SSID[] = "";  // adicione o ssid da rede
+const char WIFI_PASSWORD[] = "";  // adicione a senha
 
 char* connect_wifi()
 {

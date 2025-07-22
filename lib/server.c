@@ -4,9 +4,6 @@
 #include <stdlib.h>
 #include "global_manage.h"
 
-// =================================================================================
-// HTML / CSS / JavaScript - FINAL COM TODOS OS CAMPOS E GRÁFICOS
-// =================================================================================
 const char HTML_BODY[] =
 "<!DOCTYPE html><html><head><title>Dashboard do Sensor</title><meta charset='UTF-8'>"
 "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
@@ -14,6 +11,10 @@ const char HTML_BODY[] =
 "body{font-family:\"Segoe UI\",sans-serif;background:#1e1e2f;color:#f0f0f0;display:flex;justify-content:center;padding:10px;margin:0}"
 ".container{width:100%;max-width:900px;background:#2c2f48;padding:30px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3)}"
 "h1,h2{text-align:center;color:#fff}hr{border:1px solid #444;margin:30px 0}"
+".tabs{display:flex;justify-content:center;margin-bottom:20px}"
+".tab{padding:10px 20px;cursor:pointer;background:#444;margin:0 5px;border-radius:8px;color:#fff}"
+".tab.active{background:#28a745}"
+".section{display:none} .section.active{display:block}"
 ".grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;text-align:center}"
 ".card{background:#3c3f5a;padding:15px;border-radius:12px;border:1px solid #555}"
 ".card p{margin:0;font-size:1.5rem;font-weight:bold;color:#4fc3f7}.card span{font-size:0.9rem;color:#ccc}"
@@ -21,9 +22,13 @@ const char HTML_BODY[] =
 ".chart-container{width:100%}"
 ".form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}"
 ".form-group{display:flex;flex-direction:column}label{margin-bottom:5px;font-weight:bold;color:#ddd;text-align:left}"
-"input{padding:6px;border:1px solid #666;border-radius:5px;font-size:0.9rem;background:#444;color:#fff}"
-"button{padding:8px;border:none;background:#28a745;color:white;border-radius:5px;cursor:pointer;margin-top:8px}"
-".limit-inputs{display:flex;gap:10px}.limit-inputs input{width:calc(50% - 28px)}"
+"input{padding:10px 14px;border:1px solid #666;border-radius:10px;font-size:0.9rem;background:rgba(255,255,255,0.05);color:#fff;"
+"transition:all 0.2s ease-in-out;box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);backdrop-filter:blur(5px)}"
+"input:focus{outline:none;border-color:#4fc3f7;background:rgba(255,255,255,0.08)}"
+"input::placeholder{color:#bbb}"
+"button{padding:10px;border:none;background:#28a745;color:white;border-radius:8px;cursor:pointer;margin-top:10px;font-weight:bold}"
+"button:hover{background:#218838}"
+".limit-inputs{display:flex;gap:10px}.limit-inputs input{width:100%}"
 "</style>"
 "<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>"
 "<script>"
@@ -55,25 +60,51 @@ const char HTML_BODY[] =
 "const labels=d.hist_labels;tempChart.data.labels=labels;umidChart.data.labels=labels;pressChart.data.labels=labels;altChart.data.labels=labels;"
 "tempChart.update();umidChart.update();pressChart.update();altChart.update();"
 "}).catch(e=>console.error('Erro:',e))}"
-"window.onload=()=>{initCharts();atualizarDados();setInterval(atualizarDados,2000)};"
+"function switchTab(tab){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));"
+"document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));"
+"document.getElementById(tab).classList.add('active');"
+"document.getElementById('tab_'+tab).classList.add('active');}"
+"window.onload=()=>{initCharts();atualizarDados();setInterval(atualizarDados,2000);switchTab('principal')};"
 "</script></head><body>"
-"<div class=container><h1>Dashboard do Sensor</h1><div class=grid>"
-"<div class=card><p id=temp>--</p><span>🌡️ Temperatura (°C)</span></div><div class=card><p id=umid>--</p><span>💧 Umidade (%)</span></div>"
-"<div class=card><p id=press>--</p><span>🧭 Pressão (hPa)</span></div><div class=card><p id=alt>--</p><span>⛰️ Altitude (m)</span></div></div><hr>"
+"<div class=container><h1>Dashboard do Sensor</h1>"
+
+"<div class=tabs>"
+"<div class='tab' id='tab_principal' onclick=\"switchTab('principal')\">📊 Principal</div>"
+"<div class='tab' id='tab_config' onclick=\"switchTab('config')\">⚙️ Configurações</div>"
+"<div class='tab' id='tab_graficos' onclick=\"switchTab('graficos')\">📈 Gráficos</div>"
+"</div>"
+
+"<div class='section' id='principal'>"
+"<div class=grid>"
+"<div class=card><p id=temp>--</p><span>🌡️ Temperatura (°C)</span></div>"
+"<div class=card><p id=umid>--</p><span>💧 Umidade (%)</span></div>"
+"<div class=card><p id=press>--</p><span>🧭 Pressão (hPa)</span></div>"
+"<div class=card><p id=alt>--</p><span>⛰️ Altitude (m)</span></div>"
+"</div></div>"
+
+"<div class='section' id='config'>"
 "<h2>Configurações de Calibração</h2><div class=form-grid>"
 "<div class=form-group><label>Offset 🌡️ Temperatura:</label><input type=number step=0.1 id=input_offset_temp><button onclick=\"setConfig('offset_temp')\">Calibrar</button></div>"
 "<div class=form-group><label>Offset 💧 Umidade:</label><input type=number step=0.1 id=input_offset_umid><button onclick=\"setConfig('offset_umid')\">Calibrar</button></div>"
 "<div class=form-group><label>Offset 🧭 Pressão:</label><input type=number step=0.1 id=input_offset_press><button onclick=\"setConfig('offset_press')\">Calibrar</button></div>"
 "<div class=form-group><label>Offset ⛰️ Altitude:</label><input type=number step=0.1 id=input_offset_alt><button onclick=\"setConfig('offset_alt')\">Calibrar</button></div></div>"
-"<h2>Configurações de Alertas</h2><div class=form-grid>"
+"<h2>Configurações de limites</h2><div class=form-grid>"
 "<div class=form-group><label>Limites 🌡️ Temperatura (°C):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_temp> <input type=number placeholder=Max id=input_limite_max_temp></div><button onclick=\"setLimits('temp')\">Aplicar</button></div>"
 "<div class=form-group><label>Limites 💧 Umidade (%):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_umid> <input type=number placeholder=Max id=input_limite_max_umid></div><button onclick=\"setLimits('umid')\">Aplicar</button></div>"
 "<div class=form-group><label>Limites 🧭 Pressão (hPa):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_press> <input type=number placeholder=Max id=input_limite_max_press></div><button onclick=\"setLimits('press')\">Aplicar</button></div>"
-"<div class=form-group><label>Limites ⛰️ Altitude (m):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_alt> <input type=number placeholder=Max id=input_limite_max_alt></div><button onclick=\"setLimits('alt')\">Aplicar</button></div>"
-"</div><hr><div class=charts-grid>"
-"<div class=chart-container><canvas id=tempChart></canvas></div><div class=chart-container><canvas id=umidChart></canvas></div>"
-"<div class=chart-container><canvas id=pressChart></canvas></div><div class=chart-container><canvas id=altChart></canvas></div></div>"
+"<div class=form-group><label>Limites ⛰️ Altitude (m):</label><div class=limit-inputs><input type=number placeholder=Min id=input_limite_min_alt> <input type=number placeholder=Max id=input_limite_max_alt></div><button onclick=\"setLimits('alt')\">Aplicar</button></div></div></div>"
+
+"<div class='section' id='graficos'>"
+"<div class=charts-grid>"
+"<div class=chart-container><canvas id=tempChart></canvas></div>"
+"<div class=chart-container><canvas id=umidChart></canvas></div>"
+"<div class=chart-container><canvas id=pressChart></canvas></div>"
+"<div class=chart-container><canvas id=altChart></canvas></div></div></div>"
+
 "</div></body></html>";
+
+
+
 
 
 
