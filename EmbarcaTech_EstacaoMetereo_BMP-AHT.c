@@ -215,6 +215,6 @@ int main()
     
     vTaskStartScheduler();
 
-    // O código nunca deve chegar aqui. Se chegar, algo deu muito errado.
+    // Loop de debug
     while(1) {};
 }
